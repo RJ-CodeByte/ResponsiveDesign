@@ -7,7 +7,10 @@ import {
     TextInput,
     TouchableOpacity,
     Keyboard,
-    TouchableWithoutFeedback
+    Dimensions,
+    SafeAreaView,
+    ScrollView
+
 } from 'react-native';
 import { scale, verticalScale, moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import React, { useState } from 'react';

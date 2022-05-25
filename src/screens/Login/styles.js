@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         paddingTop: moderateVerticalScale(44)
 
     }, forgetView: {
-        alignItems: 'flex-end',
+        alignSelf: 'flex-end',
         marginVertical: moderateVerticalScale(24)
     }, forgetText: {
         fontSize: scale(16),
