@@ -8,9 +8,6 @@ import Constants from '../../constants/navigationStrings'
 const ChooseAccount = ({ navigation }) => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View style={{ paddingHorizontal: moderateScale(24), }}>
-                <HeaderComp />
-            </View>
             <View style={styles.container}>
                 <Text style={styles.headingText}>Choose Your Account Type</Text>
                 <View style={{ alignItems: 'center' }}>
