@@ -16,7 +16,7 @@ import React, { useState } from 'react';
 import styles from './styles';
 import TextInputWithLabel from '../../Components/TextInputWithLabel';
 import ImagePath from '../../constants/ImagePath'
-import ButttonComp from '../../Components/ButttonComp';
+import ButtonComp from '../../Components/ButttonComp';
 import Constants from '../../constants/navigationStrings'
 
 const Login = ({ navigation }) => {
@@ -52,7 +52,7 @@ const Login = ({ navigation }) => {
                     <TouchableOpacity style={styles.forgetView} onPress={() => navigation.navigate(Constants.FORGET_PASSWORD)} activeOpacity={0.7}>
                         <Text style={styles.forgetText}>Forget Password ?</Text>
                     </TouchableOpacity>
-                    <ButttonComp
+                    <ButtonComp
                         btnText={"Login"}
                     />
                 </View>

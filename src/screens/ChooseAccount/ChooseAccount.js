@@ -2,7 +2,7 @@ import { StyleSheet, Text, SafeAreaView, View, Image } from 'react-native'
 import React from 'react'
 import HeaderComp from '../../Components/HeaderComp'
 import { moderateScale } from 'react-native-size-matters'
-import ButttonComp from '../../Components/ButttonComp'
+import ButtonComp from '../../Components/ButttonComp'
 import styles from './styles'
 import Constants from '../../constants/navigationStrings'
 const ChooseAccount = ({ navigation }) => {
@@ -18,7 +18,7 @@ const ChooseAccount = ({ navigation }) => {
                     <Image style={styles.imageStyle} source={{ uri: 'https://cdn-icons-png.flaticon.com/512/146/146031.png' }} />
                     <Text style={styles.textStyle}>Freelancer</Text>
                 </View>
-                <ButttonComp btnText={"Continue"} onPress={() => navigation.navigate(Constants.REGISTER)} btnStyle={{ width: '100%' }} />
+                <ButtonComp btnText={"Continue"} onPress={() => navigation.navigate(Constants.REGISTER)} btnStyle={{ width: '100%' }} />
             </View>
         </SafeAreaView >
     )

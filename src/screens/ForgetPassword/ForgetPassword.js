@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, SafeAreaView, FlatList, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, SafeAreaView, FlatList, ScrollView, TouchableOpacity, Keyboard, Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import ButtonComp from '../../Components/ButttonComp'
 import navigationStrings from '../../constants/navigationStrings'
 import styles from '../ForgetPassword/styles'
@@ -11,51 +11,53 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 
 const ForgetPassword = ({ navigation }) => {
-    const [isActive, setIsActive] = useState(false)
-    const [IsVisible, setIsVisible] = useState(true);
-    const data = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']
+    const [keyboardHeight, setKeyboardHeight] = useState(0)
+    const [IsVisible, setIsVisible] = useState(false)
+
+    useEffect(() => {
+        const keyBoardDidShow = Keyboard.addListener('keyboardDidShow', (event) => {
+            console.log("Event triggred", event)
+            setKeyboardHeight(event.endCoordinates.height - 79);
+        })
+        const keyBoardDidHide = Keyboard.addListener('keyboardDidHide', (event) => {
+            console.log("Event triggred", event)
+            setKeyboardHeight(0);
+        })
+        return () => {
+            keyBoardDidShow.remove();
+            keyBoardDidHide.remove();
+        }
+    }, [])
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.container}>
-                    <View style={{ flexWrap: 'wrap', backgroundColor:'red', height:60 }}>
-                        {data.map((obj) => {
-                            return (
-                                <View>
-                                    <Text>
-                                        {obj}
-                                    </Text>
-                                </View>
-                            )
-                        })}
-                        {/* <FlatList
-                            data={data}
-                            scrollEnabled={false}
-                            style={{ backgroundColor: 'red', height: 50 }}
-                            renderItem={({ item }) => (
-                                <Text>{item}</Text>
-                            )}
-                        /> */}
+            <View style={styles.container}>
+                <View style={{ flex: 1 }}>
+                    <View style={{ flex: 0.2 }}>
+                        <Image style={styles.imageStyle} source={{ uri: 'https://cdn1.iconfinder.com/data/icons/social-messaging-ui-color/254000/46-512.png' }} />
                     </View>
-                    {/* <Text style={styles.headingText}>Set Password</Text>
-                    <Text style={styles.textStyle}>Set a password for your new account</Text>
-                    <Text style={{ textAlign: "center", fontWeight: "bold" }} > (+33) 345678901</Text>
-                    <TextInputWithLabel
-                        label={'Password'}
-                        placeholder="Enter Your password"
-                        secureTextEntry={IsVisible}
-                        onPressRight={() => { setIsVisible(!IsVisible) }}
-                        rightIcon={IsVisible ? ImagePath.hideEye : ImagePath.showEye}
-                        inputStyle={{ marginVertical: moderateVerticalScale(100) }}
-                        onChangeText={() => { }}
-                    />
-                    <ButtonComp
-                        img={ImagePath.arrow}
-                        btnStyle={styles.btnStyle}
-                        onPress={() => navigation.navigate(navigationStrings.SET_PASSWORD)}
-                    /> */}
+                    <View style={{ flex: 0.4 }}>
+                        <Text style={styles.headingText}>Forget Password</Text>
+                        <Text style={styles.textStyle}>Enter The Email Address associated with Your Account</Text>
+                    </View>
+                    <View style={{ flex: 0.4, marginBottom: keyboardHeight }}>
+                        <TextInputWithLabel
+                            label={'Email'}
+                            placeholder="Enter Your password"
+                            secureTextEntry={IsVisible}
+                            onPressRight={() => { setIsVisible(!IsVisible) }}
+                            rightIcon={IsVisible ? ImagePath.hideEye : ImagePath.showEye}
+                            inputStyle={{ marginBottom: moderateVerticalScale(28) }}
+                            onChangeText={() => { }}
+                        />
+                        <ButtonComp
+                            btnText={"Send"}
+                            onPress={() => navigation.navigate(navigationStrings.FORGET_PASSWORD)}
+                        />
+                    </View>
                 </View>
-            </KeyboardAwareScrollView>
+            </View>
+
         </SafeAreaView >
     )
 }

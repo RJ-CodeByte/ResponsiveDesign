@@ -2,10 +2,13 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { moderateScale, scale } from 'react-native-size-matters'
 import colors from '../constants/colors'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const ButttonComp = ({
+
+const ButtonComp = ({
     btnStyle,
     btnText,
+    img,
     onPress = () => { }
 }) => {
     return (
@@ -13,12 +16,13 @@ const ButttonComp = ({
             activeOpacity={0.8}
             onPress={onPress}
             style={{ ...styles.btnStyle, ...btnStyle }}>
+            {!!img && <FontAwesome5 size={20} style={{ paddingVertical: moderateScale(25) }} color='white' name={img} />}
             <Text style={styles.btnTextStyle}>{btnText}</Text>
         </TouchableOpacity>
     )
 }
 
-export default ButttonComp
+export default ButtonComp
 
 const styles = StyleSheet.create({
     btnStyle: {

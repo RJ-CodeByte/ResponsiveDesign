@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import ButttonComp from '../../Components/ButttonComp'
+import ButtonComp from '../../Components/ButttonComp'
 import navigationStrings from '../../constants/navigationStrings'
 import styles from '../Register/styles'
 import TextInputWithLabel from '../../Components/TextInputWithLabel'
@@ -12,6 +12,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 const Register = ({ navigation }) => {
     const [isActive, setIsActive] = useState(false)
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -98,13 +99,13 @@ const Register = ({ navigation }) => {
                         <FontAwesome5 size={20} solid={!!isActive} style={{ marginRight: moderateScale(12) }} name={isActive ? ImagePath.activeCheck : ImagePath.inactiveCheck} />
                         <Text>By logging in, you agree to NOOVOO's Privacy Policy and Terms of Use</Text>
                     </TouchableOpacity>
-                    <ButttonComp
+                    <ButtonComp
                         btnText={'Continue'}
                         btnStyle={{
                             width: '100%',
                             marginVertical: moderateVerticalScale(20)
                         }}
-                        onPress={() => navigation.navigate(navigationStrings.REGISTER)}
+                        onPress={() => navigation.navigate(navigationStrings.SET_PASSWORD)}
                     />
                 </View>
             </KeyboardAwareScrollView>
