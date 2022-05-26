@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity } from 'reac
 import React from 'react'
 import { moderateScale, moderateVerticalScale, scale } from 'react-native-size-matters'
 import colors from '../constants/colors'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
 const TextInputWithLabel = ({
@@ -25,7 +26,8 @@ const TextInputWithLabel = ({
                 />
                 {!!rightIcon &&
                     <TouchableOpacity onPress={onPressRight} activeOpacity={0.8} >
-                        <Image source={rightIcon} style={{ tintColor: colors.blackOpacity03 }} />
+                        {/* <Image source={rightIcon} style={{ tintColor: colors.blackOpacity03 }} /> */}
+                        <FontAwesome5 name={rightIcon} size={20} style={{ color: colors.blackOpacity03 }} />
                     </TouchableOpacity>}
             </View>
         </View>

@@ -1,4 +1,5 @@
 export default {
-    showEye: require('../../assets/images/show.png'),
-    hideEye: require('../../assets/images/hide.png'),
+    showEye: 'eye',
+    hideEye: 'eye-slash',
+    back: 'arrow-left',
 }
