@@ -10,7 +10,6 @@ import {
     Dimensions,
     SafeAreaView,
     ScrollView
-
 } from 'react-native';
 import { scale, verticalScale, moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import React, { useState } from 'react';
@@ -57,10 +56,11 @@ const Login = ({ navigation }) => {
                         btnText={"Login"}
                     />
                 </View>
+
             </TouchableOpacity>
             <View style={styles.bottomView}>
                 <Text>Not A Member? </Text>
-                <TouchableOpacity activeOpacity={0.7} onPress={() => { navigation.navigate(Constants.REGISTER) }}><Text style={{ fontWeight: 'bold' }}>Join Now</Text></TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.7} onPress={() => { navigation.navigate(Constants.CHOOSE_ACCOUNT) }}><Text style={{ fontWeight: 'bold' }}>Join Now</Text></TouchableOpacity>
             </View>
         </View>
     );
