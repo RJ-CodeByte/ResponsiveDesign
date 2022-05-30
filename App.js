@@ -1,6 +1,5 @@
 import { Text, StyleSheet, View, StatusBar } from 'react-native'
 import React, { Component } from 'react'
-import AuthStack from './src/navigations/AuthStack'
 import Routes from './src/navigations/Routes'
 
 
