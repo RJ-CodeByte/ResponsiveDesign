@@ -23,6 +23,7 @@ const TextInputWithLabel = ({
                     placeholder={placeholder}
                     onChangeText={onChangeText}
                     {...props}
+
                 />
                 {!!rightIcon &&
                     <TouchableOpacity onPress={onPressRight} activeOpacity={0.8} >

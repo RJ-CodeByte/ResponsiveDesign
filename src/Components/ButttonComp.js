@@ -9,7 +9,8 @@ const ButtonComp = ({
     btnStyle,
     btnText,
     img,
-    onPress = () => { }
+    onPress = () => { },
+    btnTextStyle= {},
 }) => {
     return (
         <TouchableOpacity
@@ -17,7 +18,7 @@ const ButtonComp = ({
             onPress={onPress}
             style={{ ...styles.btnStyle, ...btnStyle }}>
             {!!img && <FontAwesome5 size={20} style={{ paddingVertical: moderateScale(25) }} color='white' name={img} />}
-            <Text style={styles.btnTextStyle}>{btnText}</Text>
+            <Text style={{...styles.btnTextStyle,...btnTextStyle}}>{btnText}</Text>
         </TouchableOpacity>
     )
 }

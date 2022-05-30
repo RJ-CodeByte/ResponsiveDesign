@@ -14,6 +14,7 @@ import {
 } from '../screens';
 import HeaderComp from '../Components/HeaderComp';
 import { } from 'react-native-safe-area-context';
+import RegisterAddress from '../screens/Register/RegiserAddress';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,7 @@ export default function AuthStack() {
         }}>
             <Stack.Screen options={{ headerShown: false }} name={Constants.LOGIN} component={Login} />
             <Stack.Screen name={Constants.REGISTER} component={Register} />
+            <Stack.Screen name={Constants.RegisterAddress} component={RegisterAddress} />
             <Stack.Screen name={Constants.CHOOSE_ACCOUNT} component={ChooseAccount} />
             <Stack.Screen name={Constants.FORGET_PASSWORD} component={ForgetPassword} />
             <Stack.Screen name={Constants.SET_PASSWORD} component={SetPassword} />

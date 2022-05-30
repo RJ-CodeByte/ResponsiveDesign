@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, Modal, ActivityIndicator } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import ButtonComp from '../../Components/ButttonComp'
 import navigationStrings from '../../constants/navigationStrings'
-import styles from '../Register/styles'
+import styles from '../Register/addressStyle'
 import TextInputWithLabel from '../../Components/TextInputWithLabel'
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -10,19 +10,31 @@ import ImagePath from '../../constants/ImagePath'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
-const Register = ({ navigation }) => {
+const RegisterAddress = ({ navigation, route }) => {
     const [isActive, setIsActive] = useState(false)
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
-    const [email, setEmailAddress] = useState('')
-    const [Dob, setDob] = useState('')
-    const [contact, setContact] = useState(0)
+    const { User } = route.params
+    const [visible, setVisible] = useState(true)
+
+    useEffect(() => {
+        setTimeout(() => {
+            setVisible(false)
+        }, 1000)
+    }, [])
 
 
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <KeyboardAwareScrollView KeyboardAwareScrollView showsVerticalScrollIndicator={false} >
+            <Modal
+                visible={visible}
+                transparent
+                animationType='fade'
+            >
+                <View style={styles.modal_container}>
+                    <ActivityIndicator color={'red'} />
+                </View>
+            </Modal >
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
 
                     <View style={{ flexDirection: 'row' }}>
@@ -30,47 +42,45 @@ const Register = ({ navigation }) => {
                             label={'First Name'}
                             placeholder="Enter Your first name"
                             inputStyle={{ flex: 1 }}
+                            value={User.firstName}
                             keyboardType='email-address'
-                            onChangeText={(fname) => { setFirstName(fname) }}
+                            onChangeText={() => { }}
                         />
                         <View style={{ marginHorizontal: moderateScale(8) }} />
                         <TextInputWithLabel
                             label={'Last Name'}
                             placeholder="Enter Your last name"
                             inputStyle={{ flex: 1 }}
+                            value={User.lastName}
                             keyboardType='email-address'
-                            onChangeText={(lname) => { setLastName(lname) }}
+                            onChangeText={() => { }}
                         />
                     </View>
-                    {/* <TextInputWithLabel
-                        label={'Salon Name'}
-                        placeholder="Enter Your last name"
-                        inputStyle={{ marginVertical: moderateVerticalScale(28) }}
-                        keyboardType='email-address'
-                        onChangeText={() => { }}
-                    /> */}
                     <TextInputWithLabel
                         label={'Date of Birth'}
-                        placeholder="Enter Your DOB"
-                        inputStyle={{ marginVertical: moderateVerticalScale(28) }}
-                        onChangeText={(dob) => { setDob(dob) }}
+                        placeholder="Enter Your Dob"
+                        inputStyle={{ marginBottom: moderateVerticalScale(28) }}
+                        value={User.Dob}
+                        keyboardType='email-address'
+                        onChangeText={() => { }}
                     />
                     <TextInputWithLabel
                         label={'Phone Number'}
                         placeholder="Enter Your last name"
                         inputStyle={{ marginBottom: moderateVerticalScale(20) }}
-                        keyboardType='number-pad'
-                        onChangeText={(number) => { setContact(number) }}
+                        value={User.contact}
+                        keyboardType='email-address'
+                        onChangeText={() => { }}
                     />
                     <TextInputWithLabel
                         label={'Email'}
-                        placeholder="Enter Your Email Address"
+                        placeholder="Enter Your last name"
                         inputStyle={{ marginBottom: moderateVerticalScale(20) }}
+                        value={User.email}
                         keyboardType='email-address'
-                        autoCapitalize={false}
-                        onChangeText={(email) => { setEmailAddress(email) }}
+                        onChangeText={() => { }}
                     />
-                    {/* <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row' }}>
                         <TextInputWithLabel
                             label={'Country'}
                             placeholder="Enter Your Country"
@@ -100,7 +110,7 @@ const Register = ({ navigation }) => {
                         inputStyle={{ marginBottom: moderateVerticalScale(28) }}
                         keyboardType='email-address'
                         onChangeText={() => { }}
-                    /> */}
+                    />
                     <TouchableOpacity activeOpacity={0.8} style={styles.bottomView} onPress={() => { setIsActive(!isActive) }}>
                         <FontAwesome5 size={20} solid={!!isActive} style={{ marginRight: moderateScale(12) }} name={isActive ? ImagePath.activeCheck : ImagePath.inactiveCheck} />
                         <Text>By logging in, you agree to NOOVOO's Privacy Policy and Terms of Use</Text>
@@ -111,22 +121,12 @@ const Register = ({ navigation }) => {
                             width: '100%',
                             marginVertical: moderateVerticalScale(20)
                         }}
-                        onPress={() => {
-
-                            var user = {
-                                firstName: firstName,
-                                lastName: lastName,
-                                Dob: Dob,
-                                contact: contact,
-                                email: email,
-                            }
-                            navigation.navigate(navigationStrings.RegisterAddress, { User: user })
-                        }}
+                        onPress={() => navigation.navigate(navigationStrings.SET_PASSWORD)}
                     />
                 </View>
-            </KeyboardAwareScrollView >
+            </KeyboardAwareScrollView>
         </SafeAreaView >
     )
 }
 
-export default Register
+export default RegisterAddress
