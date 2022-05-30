@@ -9,8 +9,9 @@ import colors from '../../constants/colors'
 import { moderateScale, moderateVerticalScale, scale } from 'react-native-size-matters'
 import styles from '../Home/styles';
 import ButtonComp from '../../Components/ButttonComp';
+import navigationStrings from '../../constants/navigationStrings';
 
-const Home = () => {
+const Home = ({ navigation }) => {
 
     const renderItem = ({ item }) => {
         return (
@@ -65,6 +66,16 @@ const Home = () => {
                     <View style={{ flex: 1 }}>
                         <ButtonComp
                             btnText={"Accept"}
+                            onPress={() => {
+                                var data = {
+                                    date: item?.date,
+                                    name: item?.name,
+                                    address: item?.address,
+                                }
+                                
+                                    navigation.navigate("Profile", { data: data })                    
+
+                            }}
                         />
                     </View>
 

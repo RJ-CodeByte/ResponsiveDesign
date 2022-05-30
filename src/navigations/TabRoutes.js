@@ -9,7 +9,7 @@ import colors from '../constants/colors';
 
 const BottomTab = createBottomTabNavigator();
 
-export default function TabRoutes() {
+export default function TabRoutes({route}) {
     return (
         <BottomTab.Navigator
             screenOptions={{
@@ -27,7 +27,7 @@ export default function TabRoutes() {
                 tabBarIcon: ({ focused }) => {
                     return <FontAwesome5 color={focused ? colors.themeColor : colors.black} size={20} name={'book'} />
                 }
-            }} name="Profile" component={Profile} />
+            }} name="Profile" component={Profile} initialParams={{ data: null }} />
             <BottomTab.Screen options={{
                 tabBarIcon: ({ focused }) => {
                     return <FontAwesome5 color={focused ? colors.themeColor : colors.black} size={20} name={'user'} />

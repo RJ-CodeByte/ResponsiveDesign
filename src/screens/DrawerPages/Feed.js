@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, SafeAreaView, View } from 'react-native'
 import React from 'react'
 
 const Feed = () => {
     return (
-        <View>
+        <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
             <Text>Feed</Text>
-        </View>
+        </SafeAreaView>
     )
 }
 
