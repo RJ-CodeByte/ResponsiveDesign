@@ -11,26 +11,30 @@ const TextInputWithLabel = ({
     onChangeText = () => { },
     inputStyle = {},
     rightIcon,
+    error,
     onPressRight,
     ...props
 }) => {
     return (
-        <View style={{ ...styles.inputStyle, ...inputStyle }}>
-            <Text style={styles.labelStyle}>{label}</Text>
-            <View style={styles.flexView}>
-                <TextInput
-                    style={styles.inlineStyle}
-                    placeholder={placeholder}
-                    onChangeText={onChangeText}
-                    {...props}
+        <View style={{ ...inputStyle }}>
+            <View style={{ ...styles.inputStyle }}>
+                <Text style={styles.labelStyle}>{label}</Text>
+                <View style={styles.flexView}>
+                    <TextInput
+                        style={styles.inlineStyle}
+                        placeholder={placeholder}
+                        onChangeText={onChangeText}
+                        {...props}
 
-                />
-                {!!rightIcon &&
-                    <TouchableOpacity onPress={onPressRight} activeOpacity={0.8} >
-                        {/* <Image source={rightIcon} style={{ tintColor: colors.blackOpacity03 }} /> */}
-                        <FontAwesome5 name={rightIcon} size={20} style={{ color: colors.blackOpacity03 }} />
-                    </TouchableOpacity>}
+                    />
+                    {!!rightIcon &&
+                        <TouchableOpacity onPress={onPressRight} activeOpacity={0.8} >
+                            {/* <Image source={rightIcon} style={{ tintColor: colors.blackOpacity03 }} /> */}
+                            <FontAwesome5 name={rightIcon} size={20} style={{ color: colors.blackOpacity03 }} />
+                        </TouchableOpacity>}
+                </View>
             </View>
+            {!!error && <Text style={{ color: "red" }}>{error}</Text>}
         </View>
     )
 }

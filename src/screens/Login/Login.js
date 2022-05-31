@@ -22,6 +22,40 @@ import Constants from '../../constants/navigationStrings'
 const Login = ({ navigation }) => {
 
     const [IsVisible, setIsVisible] = useState(true);
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [emailError, setEmailError] = useState('')
+    const [passwordError, setPasswordError] = useState('')
+
+
+    const validateEmail = (email) => {
+        return email.match(
+            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    };
+
+
+    const validation = () => {
+        if (email.length == 0) {
+            setEmailError("Email can not be empty")
+        }
+        else if (!validateEmail(email)) {
+            setEmailError("Email is Not Valid")
+        }
+        else {
+            setEmailError("")
+        }
+        if (password.length == 0) {
+            setPasswordError("Password can not be empty")
+        } else if (password.length <= 4) {
+            setPasswordError("Password must be greater then 4")
+        }
+        else {
+            setPasswordError("")
+        }
+    }
+
+
 
     return (
         <View style={styles.container}>
@@ -37,9 +71,11 @@ const Login = ({ navigation }) => {
                     <TextInputWithLabel
                         label={'Email Address'}
                         placeholder="Enter Your email"
+                        autoCapitalize={'none'}
                         inputStyle={{ marginBottom: moderateVerticalScale(28) }}
                         keyboardType='email-address'
-                        onChangeText={() => { }}
+                        onChangeText={(email) => { setEmail(email) }}
+                        error={emailError}
                     />
                     <TextInputWithLabel
                         label={'Password'}
@@ -47,13 +83,15 @@ const Login = ({ navigation }) => {
                         secureTextEntry={IsVisible}
                         onPressRight={() => { setIsVisible(!IsVisible) }}
                         rightIcon={IsVisible ? ImagePath.hideEye : ImagePath.showEye}
-                        onChangeText={() => { }}
+                        onChangeText={(password) => { setPassword(password) }}
+                        error={passwordError}
                     />
                     <TouchableOpacity style={styles.forgetView} onPress={() => navigation.navigate(Constants.FORGET_PASSWORD)} activeOpacity={0.7}>
                         <Text style={styles.forgetText}>Forget Password ?</Text>
                     </TouchableOpacity>
                     <ButtonComp
                         btnText={"Login"}
+                        onPress={validation}
                     />
                 </View>
 

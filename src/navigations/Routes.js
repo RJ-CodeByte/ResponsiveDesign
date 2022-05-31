@@ -9,7 +9,7 @@ import { forModalPresentationIOS } from '@react-navigation/stack/lib/typescript/
 export default function Routes() {
     return (
         <NavigationContainer>
-            {true ? <HomeStack /> : <AuthStack />}
+            {false ? <HomeStack /> : <AuthStack />}
         </NavigationContainer>
     );
 }

@@ -67,7 +67,7 @@ const Register = ({ navigation }) => {
                         placeholder="Enter Your Email Address"
                         inputStyle={{ marginBottom: moderateVerticalScale(20) }}
                         keyboardType='email-address'
-                        autoCapitalize={false}
+                        autoCapitalize={'none'}
                         onChangeText={(email) => { setEmailAddress(email) }}
                     />
                     {/* <View style={{ flexDirection: 'row' }}>
