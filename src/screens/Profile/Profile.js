@@ -7,8 +7,9 @@ const Profile = ({ navigation, route, setParams }) => {
     return (
         <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
             {route.params.data ?
-                <Text>{data.name}</Text> : <Text>Profile</Text>}
+                <Text>{data.name}</Text>
 
+                : <Text>Profile</Text>}
         </SafeAreaView>
     )
 }

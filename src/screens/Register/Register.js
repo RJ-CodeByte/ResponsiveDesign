@@ -8,6 +8,7 @@ import { moderateScale, moderateVerticalScale } from 'react-native-size-matters'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ImagePath from '../../constants/ImagePath'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { registerFirebaseUser } from '../../Redux/actions/auth'
 
 
 const Register = ({ navigation }) => {
@@ -15,10 +16,10 @@ const Register = ({ navigation }) => {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [email, setEmailAddress] = useState('')
+    const [password, setPassword] = useState('')
     const [Dob, setDob] = useState('')
     const [contact, setContact] = useState(0)
-
-
+    const [IsVisible, setIsVisible] = useState(true);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -48,7 +49,7 @@ const Register = ({ navigation }) => {
                         inputStyle={{ marginVertical: moderateVerticalScale(28) }}
                         keyboardType='email-address'
                         onChangeText={() => { }}
-                    /> */} 
+                    /> */}
                     <TextInputWithLabel
                         label={'Date of Birth'}
                         placeholder="Enter Your DOB"
@@ -69,6 +70,16 @@ const Register = ({ navigation }) => {
                         keyboardType='email-address'
                         autoCapitalize={'none'}
                         onChangeText={(email) => { setEmailAddress(email) }}
+                    />
+                    <TextInputWithLabel
+                        label={'Password'}
+                        placeholder="Enter Your password"
+                        secureTextEntry={IsVisible}
+                        onPressRight={() => { setIsVisible(!IsVisible) }}
+                        inputStyle={{ marginBottom: moderateVerticalScale(20) }}
+                        rightIcon={IsVisible ? ImagePath.hideEye : ImagePath.showEye}
+                        // inputStyle={{ marginVertical: moderateVerticalScale(100) }}
+                        onChangeText={(password) => { setPassword(password) }}
                     />
                     {/* <View style={{ flexDirection: 'row' }}>
                         <TextInputWithLabel
@@ -112,15 +123,15 @@ const Register = ({ navigation }) => {
                             marginVertical: moderateVerticalScale(20)
                         }}
                         onPress={() => {
-
-                            var user = {
-                                firstName: firstName,
-                                lastName: lastName,
-                                Dob: Dob,
-                                contact: contact,
-                                email: email,
-                            }
-                            navigation.navigate(navigationStrings.RegisterAddress, { User: user })
+                            registerFirebaseUser(email, password).then(() => navigation.navigate(navigationStrings.LOGIN));
+                            // var user = {
+                            //     firstName: firstName,
+                            //     lastName: lastName,
+                            //     Dob: Dob,
+                            //     contact: contact,
+                            //     email: email,
+                            // }
+                            // navigation.navigate(navigationStrings.RegisterAddress, { User: user })
                         }}
                     />
                 </View>

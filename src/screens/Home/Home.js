@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 
 import React from 'react'
 import { FlatList } from 'react-native-gesture-handler'
@@ -9,9 +9,14 @@ import colors from '../../constants/colors'
 import { moderateScale, moderateVerticalScale, scale } from 'react-native-size-matters'
 import styles from '../Home/styles';
 import ButtonComp from '../../Components/ButttonComp';
-import navigationStrings from '../../constants/navigationStrings';
+import { useSelector, useDispatch } from 'react-redux';
+import { userLogout } from '../../Redux/actions/auth';
+
 
 const Home = ({ navigation }) => {
+    const { token, success } = useSelector(state => state.userReducer)
+    const dispatch = useDispatch()
+
 
     const renderItem = ({ item }) => {
         return (
@@ -72,9 +77,7 @@ const Home = ({ navigation }) => {
                                     name: item?.name,
                                     address: item?.address,
                                 }
-                                
-                                    navigation.navigate("Profile", { data: data })                    
-
+                                navigation.navigate("Profile", { data: data })
                             }}
                         />
                     </View>
@@ -91,7 +94,9 @@ const Home = ({ navigation }) => {
                     {/* <Text  /> */}
                     <View />
                     <Text style={styles.headerText}>Nanny Line</Text>
-                    <FontAwesome5 size={20} color={colors.themeColor} name={'bell'} />
+                    <TouchableOpacity onPress={() => dispatch(userLogout())}>
+                        <FontAwesome5 size={20} color={colors.themeColor} name={'sign-out-alt'} />
+                    </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1, marginTop: moderateVerticalScale(10), marginHorizontal: moderateScale(16) }}>
                     <FlatList

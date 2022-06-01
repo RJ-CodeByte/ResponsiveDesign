@@ -19,14 +19,13 @@ import ImagePath from '../../constants/ImagePath'
 import ButtonComp from '../../Components/ButttonComp';
 import Constants from '../../constants/navigationStrings';
 import { useSelector, useDispatch } from 'react-redux';
-import { userLogin } from '../../Redux/actions/auth';
+import { loginFirebaseUser, userLogin } from '../../Redux/actions/auth';
 
 const Login = ({ navigation }) => {
 
 
     const { token, success } = useSelector(state => state.userReducer)
     const dispatch = useDispatch()
-
     const [IsVisible, setIsVisible] = useState(true);
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -68,9 +67,9 @@ const Login = ({ navigation }) => {
 
     const logeedIn = async () => {
         validation().then(() =>
-            dispatch(userLogin(email, password)),
+            // dispatch(userLogin(email, password)),
+            dispatch(loginFirebaseUser(email, password)),
         )
-
 
     }
 
