@@ -12,20 +12,29 @@ import {
     ScrollView
 } from 'react-native';
 import { scale, verticalScale, moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './styles';
 import TextInputWithLabel from '../../Components/TextInputWithLabel';
 import ImagePath from '../../constants/ImagePath'
 import ButtonComp from '../../Components/ButttonComp';
-import Constants from '../../constants/navigationStrings'
+import Constants from '../../constants/navigationStrings';
+import { useSelector, useDispatch } from 'react-redux';
+import { userLogin } from '../../Redux/actions/auth';
 
 const Login = ({ navigation }) => {
+
+
+    const { token, success } = useSelector(state => state.userReducer)
+    const dispatch = useDispatch()
 
     const [IsVisible, setIsVisible] = useState(true);
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
+
+
+
 
 
     const validateEmail = (email) => {
@@ -35,7 +44,7 @@ const Login = ({ navigation }) => {
     };
 
 
-    const validation = () => {
+    const validation = async () => {
         if (email.length == 0) {
             setEmailError("Email can not be empty")
         }
@@ -53,6 +62,16 @@ const Login = ({ navigation }) => {
         else {
             setPasswordError("")
         }
+        return true
+    }
+
+
+    const logeedIn = async () => {
+        validation().then(() =>
+            dispatch(userLogin(email, password)),
+        )
+
+
     }
 
 
@@ -91,7 +110,7 @@ const Login = ({ navigation }) => {
                     </TouchableOpacity>
                     <ButtonComp
                         btnText={"Login"}
-                        onPress={validation}
+                        onPress={logeedIn}
                     />
                 </View>
 

@@ -48,7 +48,7 @@ const Register = ({ navigation }) => {
                         inputStyle={{ marginVertical: moderateVerticalScale(28) }}
                         keyboardType='email-address'
                         onChangeText={() => { }}
-                    /> */}
+                    /> */} 
                     <TextInputWithLabel
                         label={'Date of Birth'}
                         placeholder="Enter Your DOB"
