@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FlatList } from 'react-native-gesture-handler'
 import dummyData from './dummyData'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -10,13 +10,36 @@ import { moderateScale, moderateVerticalScale, scale } from 'react-native-size-m
 import styles from '../Home/styles';
 import ButtonComp from '../../Components/ButttonComp';
 import { useSelector, useDispatch } from 'react-redux';
-import { userLogout } from '../../Redux/actions/auth';
+import { userList, userLogout } from '../../Redux/actions/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
 
 
 const Home = ({ navigation }) => {
-    const { token, success } = useSelector(state => state.userReducer)
+    const { users } = useSelector(state => state.userReducer)
     const dispatch = useDispatch()
 
+    useEffect(() => {
+        console.log("Items" + JSON.stringify(users))
+        dispatch(userList())
+    }, [])
+
+
+
+    const GooglesignIncancled = async () => {
+        try {
+            await GoogleSignin.revokeAccess().then(() => console.log("Log Out"));
+            await GoogleSignin.signOut().then(() => console.log("Log Out"));
+            await auth()
+                .signOut()
+                .then(() => {
+                    dispatch(userLogout());
+                    alert('Your are signed out!');
+                });
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const renderItem = ({ item }) => {
         return (
@@ -26,19 +49,19 @@ const Home = ({ navigation }) => {
                         <Text style={{
                             fontSize: moderateScale(12),
                             color: colors.blackOpacity80
-                        }}>{item?.date}</Text>
+                        }}>{item.email}</Text>
                         <Text style={{
                             fontSize: moderateScale(12),
                             fontWeight: 'bold',
                             color: colors.black,
                             marginTop: moderateVerticalScale(8),
-                        }} >{item?.name}</Text>
+                        }} >{item?.first_name}</Text>
                         <Text style={{
                             fontSize: moderateScale(12),
                             color: colors.blackOpacity50,
-                        }}><FontAwesome5 name='map-marker-alt' /> {item?.address}</Text>
+                        }}><FontAwesome5 name='map-marker-alt' /> {item?.last_name}</Text>
                     </View>
-                    <Image source={{ uri: "https://thumbs.dreamstime.com/b/user-profile-icon-creative-trendy-colorful-round-button-illustration-isolated-156511788.jpg" }}
+                    <Image source={{ uri: !!item.avatar ? item.avatar : "https://thumbs.dreamstime.com/b/user-profile-icon-creative-trendy-colorful-round-button-illustration-isolated-156511788.jpg" }}
                         style={{
                             width: moderateScale(64),
                             height: moderateScale(64),
@@ -94,14 +117,14 @@ const Home = ({ navigation }) => {
                     {/* <Text  /> */}
                     <View />
                     <Text style={styles.headerText}>Nanny Line</Text>
-                    <TouchableOpacity onPress={() => dispatch(userLogout())}>
+                    <TouchableOpacity onPress={GooglesignIncancled}>
                         <FontAwesome5 size={20} color={colors.themeColor} name={'sign-out-alt'} />
                     </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1, marginTop: moderateVerticalScale(10), marginHorizontal: moderateScale(16) }}>
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        data={dummyData}
+                        data={users}
                         renderItem={renderItem}
                         ItemSeparatorComponent={() => <View style={{ marginBottom: moderateVerticalScale(16) }} />}
                     />

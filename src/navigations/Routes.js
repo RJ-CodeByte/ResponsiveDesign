@@ -11,8 +11,13 @@ import { forModalPresentationIOS } from '@react-navigation/stack/lib/typescript/
 export default function Routes() {
     const { token } = useSelector(state => state.userReducer)
     return (
+
         <NavigationContainer>
             {!!token ? <HomeStack /> : <AuthStack />}
         </NavigationContainer>
     );
 }
+
+
+
+

@@ -32,6 +32,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: "row",
         margin: moderateVerticalScale(44)
+    }, socialLoginStyle: {
+        shadowColor: '#000',
+        shadowOpacity: 0.3,
+        // borderWidth: 1,
+        shadowOffset: { width: 0, height: 0 },
+        backgroundColor: '#FFFF',
+        margin: moderateScale(2),
+        padding: moderateScale(16),
+        borderRadius: moderateScale(15),
     }
 
 });

@@ -5,3 +5,6 @@ export const getApiUrl = (endPoint) => API_BASE_URL + endPoint
 export const LOGIN = getApiUrl('/login')
 
 export const SIGNUP = getApiUrl('/register')
+
+
+export const UserList = getApiUrl('/users?page=2')

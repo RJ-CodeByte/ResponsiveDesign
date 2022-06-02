@@ -18,13 +18,17 @@ import TextInputWithLabel from '../../Components/TextInputWithLabel';
 import ImagePath from '../../constants/ImagePath'
 import ButtonComp from '../../Components/ButttonComp';
 import Constants from '../../constants/navigationStrings';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginFirebaseUser, userLogin } from '../../Redux/actions/auth';
+import { loginFirebaseUser, onGoogleButtonPress, userLogin } from '../../Redux/actions/auth';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import SnackBar from 'react-native-snackbar-component';
 
 const Login = ({ navigation }) => {
 
 
-    const { token, success } = useSelector(state => state.userReducer)
+    const { isLoading } = useSelector(state => state.userReducer)
     const dispatch = useDispatch()
     const [IsVisible, setIsVisible] = useState(true);
     const [email, setEmail] = useState('')
@@ -33,6 +37,13 @@ const Login = ({ navigation }) => {
     const [passwordError, setPasswordError] = useState('')
 
 
+    useEffect(() => {
+        GoogleSignin.configure({
+            webClientId: '321735861258-50dtq7v8l77qrt2fo5te2cde52cpjb56.apps.googleusercontent.com',
+            offlineAccess: true,
+        })
+        console.log(isLoading)
+    }, [])
 
 
 
@@ -42,6 +53,20 @@ const Login = ({ navigation }) => {
         );
     };
 
+    // const onGoogleButtonPress = async () => {
+    //     try {
+    //         // Get the users ID token
+    //         const { idToken } = await GoogleSignin.signIn();
+
+    //         // Create a Google credential with the token
+    //         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+    //         // Sign-in the user with the credential
+    //         return auth().signInWithCredential(googleCredential);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 
     const validation = async () => {
         if (email.length == 0) {
@@ -72,6 +97,12 @@ const Login = ({ navigation }) => {
         )
 
     }
+
+    const socialLogeedIn = async () => {
+        // dispatch(userLogin(email, password)),
+        dispatch(onGoogleButtonPress())
+    }
+
 
 
 
@@ -112,13 +143,25 @@ const Login = ({ navigation }) => {
                         onPress={logeedIn}
                     />
                 </View>
-
-            </TouchableOpacity>
+                <View style={{ flexDirection: 'row', justifyContent: "center", marginTop: moderateVerticalScale(50) }}>
+                    <View style={{ flexDirection: "row", flex: 0.5 }}>
+                        <TouchableOpacity style={styles.socialLoginStyle} onPress={socialLogeedIn} >
+                            <FontAwesome5 name={'google'} size={50} solid={true} color={'#20bf6b'} />
+                        </TouchableOpacity >
+                    </View>
+                    <View>
+                        <TouchableOpacity style={styles.socialLoginStyle} >
+                            <FontAwesome5 name={'facebook'} size={50} solid={true} color={'#45aaf2'} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </TouchableOpacity >
+            <SnackBar visible={isLoading} autoHidingTime={1000} textMessage="Login Success" />
             <View style={styles.bottomView}>
                 <Text>Not A Member? </Text>
                 <TouchableOpacity activeOpacity={0.7} onPress={() => { navigation.navigate(Constants.CHOOSE_ACCOUNT) }}><Text style={{ fontWeight: 'bold' }}>Join Now</Text></TouchableOpacity>
             </View>
-        </View>
+        </View >
     );
 };
 

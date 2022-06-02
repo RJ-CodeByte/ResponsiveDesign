@@ -16,6 +16,7 @@ export default class App extends Component {
             barStyle={'dark-content'}
             translucent={true}
           />
+
           <Routes />
           {/* <Text>App</Text> */}
         </View>
