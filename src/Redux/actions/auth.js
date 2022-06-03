@@ -68,6 +68,7 @@ export const loginFirebaseUser = (email, password) => {
     try {
         return async dispatch => {
             try {
+                console.log("errr")
                 await auth().signInWithEmailAndPassword(email, password).then(() => auth().onAuthStateChanged(user => {
                     dispatch({
                         type: types.LOGIN,
@@ -136,11 +137,10 @@ export const registerFirebaseUser = async (mail, password) => {
 
 export const userLogout = () => {
     try {
-        return async dispatch => {
-
+        return dispatch => {
             dispatch({
                 type: types.LOGIN,
-                payload: null
+                payload: ''
             })
         }
     } catch (error) {

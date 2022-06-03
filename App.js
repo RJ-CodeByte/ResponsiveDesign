@@ -3,9 +3,17 @@ import React, { Component } from 'react'
 import Routes from './src/navigations/Routes'
 import { Store } from './src/Redux/store'
 import { Provider } from 'react-redux'
+import { notificationListener, requestUserPermission } from "./src/utils/notificationService";
 
 
 export default class App extends Component {
+
+  componentDidMount() {
+    requestUserPermission()
+    notificationListener()
+  }
+
+
   render() {
     return (
       <Provider store={Store}>

@@ -28,8 +28,8 @@ const Home = ({ navigation }) => {
 
     const GooglesignIncancled = async () => {
         try {
-            await GoogleSignin.revokeAccess().then(() => console.log("Log Out"));
-            await GoogleSignin.signOut().then(() => console.log("Log Out"));
+            // await GoogleSignin.revokeAccess().then(() => console.log("Log Out"));
+            // await GoogleSignin.signOut().then(() => console.log("Log Out"));
             await auth()
                 .signOut()
                 .then(() => {

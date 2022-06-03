@@ -68,7 +68,7 @@ const Login = ({ navigation }) => {
     //     }
     // }
 
-    const validation = async () => {
+    const validation = () => {
         if (email.length == 0) {
             setEmailError("Email can not be empty")
         }
@@ -76,7 +76,7 @@ const Login = ({ navigation }) => {
             setEmailError("Email is Not Valid")
         }
         else {
-            setEmailError("")
+            setEmailError("")            
         }
         if (password.length == 0) {
             setPasswordError("Password can not be empty")
@@ -85,16 +85,15 @@ const Login = ({ navigation }) => {
         }
         else {
             setPasswordError("")
+            return false;
         }
-        return true
+        return true;
     }
 
 
     const logeedIn = async () => {
-        validation().then(() =>
-            // dispatch(userLogin(email, password)),
-            dispatch(loginFirebaseUser(email, password)),
-        )
+        console.log("asda" + JSON.stringify(validation()));
+        if (!validation()) { dispatch(loginFirebaseUser(email, password)) }
 
     }
 
