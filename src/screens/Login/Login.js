@@ -53,20 +53,6 @@ const Login = ({ navigation }) => {
         );
     };
 
-    // const onGoogleButtonPress = async () => {
-    //     try {
-    //         // Get the users ID token
-    //         const { idToken } = await GoogleSignin.signIn();
-
-    //         // Create a Google credential with the token
-    //         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-    //         // Sign-in the user with the credential
-    //         return auth().signInWithCredential(googleCredential);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
 
     const validation = () => {
         if (email.length == 0) {
@@ -76,7 +62,7 @@ const Login = ({ navigation }) => {
             setEmailError("Email is Not Valid")
         }
         else {
-            setEmailError("")            
+            setEmailError("")
         }
         if (password.length == 0) {
             setPasswordError("Password can not be empty")

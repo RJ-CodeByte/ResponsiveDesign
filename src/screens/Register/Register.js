@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ButtonComp from '../../Components/ButttonComp'
 import navigationStrings from '../../constants/navigationStrings'
 import styles from '../Register/styles'
@@ -9,7 +9,17 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ImagePath from '../../constants/ImagePath'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { registerFirebaseUser } from '../../Redux/actions/auth'
+import SQLite from 'react-native-sqlite-storage'
 
+
+const db = SQLite.openDatabase(
+    {
+        name: 'MainDB',
+        location: 'default'
+    },
+    () => { },
+    error => { console.log(error) }
+);
 
 const Register = ({ navigation }) => {
     const [isActive, setIsActive] = useState(false)
@@ -20,6 +30,38 @@ const Register = ({ navigation }) => {
     const [Dob, setDob] = useState('')
     const [contact, setContact] = useState(0)
     const [IsVisible, setIsVisible] = useState(true);
+
+    useEffect(() => {
+        createTable();
+    }, [])
+
+
+
+    const createTable = () => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS "
+                + "Users "
+                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Email TEXT, Dob TEXT, Contact BIGINT);"
+            )
+        })
+    }
+
+    const setData = async () => {
+
+        try {
+            await db.transaction(async (tx) => {
+                await tx.executeSql(
+                    "INSERT INTO Users (Name, Email, Dob, Contact) VALUES (?,?,?,?)",
+                    [firstName, email, Dob, contact]
+                )
+            })
+            navigation.navigate('Home');
+        }
+        catch (err) {
+            console.log("Error" + err);
+        }
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -122,8 +164,9 @@ const Register = ({ navigation }) => {
                             width: '100%',
                             marginVertical: moderateVerticalScale(20)
                         }}
-                        onPress={() => {
-                            registerFirebaseUser(email, password).then(() => navigation.navigate(navigationStrings.LOGIN));
+                        onPress={
+                            setData
+                            // registerFirebaseUser(email, password).then(() => navigation.navigate(navigationStrings.LOGIN));
                             // var user = {
                             //     firstName: firstName,
                             //     lastName: lastName,
@@ -132,7 +175,7 @@ const Register = ({ navigation }) => {
                             //     email: email,
                             // }
                             // navigation.navigate(navigationStrings.RegisterAddress, { User: user })
-                        }}
+                        }
                     />
                 </View>
             </KeyboardAwareScrollView >

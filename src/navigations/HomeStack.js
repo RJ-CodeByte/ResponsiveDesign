@@ -4,6 +4,7 @@ import Constants from '../constants/navigationStrings'
 import TabRoutes from './TabRoutes';
 import DrawerStack from './DrawerStack';
 import Feed from '../screens/DrawerPages/Feed';
+import { Home } from '../screens';
 
 const Stack = createStackNavigator();
 
@@ -12,7 +13,6 @@ export default function HomeStack() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             {/* <Stack.Screen options={{ headerShown: false }} name={Constants.TabRoutes} component={TabRoutes} /> */}
             <Stack.Screen name={Constants.DrawerStack} component={DrawerStack} />
-            {/* <Stack.Screen name={"Feed"} component={Feed} /> */}
         </Stack.Navigator>
     );
 }

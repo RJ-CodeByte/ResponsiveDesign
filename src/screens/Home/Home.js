@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FlatList } from 'react-native-gesture-handler'
 import dummyData from './dummyData'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -13,16 +13,67 @@ import { useSelector, useDispatch } from 'react-redux';
 import { userList, userLogout } from '../../Redux/actions/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
+import SQLite from 'react-native-sqlite-storage'
 
+
+const db = SQLite.openDatabase(
+    {
+        name: 'MainDB',
+        location: 'default'
+    },
+    () => { },
+    error => { console.log(error) }
+);
 
 const Home = ({ navigation }) => {
     const { users } = useSelector(state => state.userReducer)
     const dispatch = useDispatch()
 
+    const [data, setData] = useState([])
+
     useEffect(() => {
         console.log("Items" + JSON.stringify(users))
-        dispatch(userList())
+        // dispatch(userList())
+        console.log(data);
+        getData();
     }, [])
+
+
+
+    const getData = async () => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                "SELECT * FROM Users",
+                [],
+                (tx, result) => {
+                    var len = result.rows.length;
+                    console.log(len);
+                    var user;
+                    let newData = []
+                    if (len > 0) {
+                        for (let index = 0; index < len; index++) {
+                            user = result.rows.item(index);
+                            newData.push(user)
+                            console.log(newData)
+                        }
+                        setData(newData);
+                    }
+                }
+            )
+        })
+    }
+
+
+    const deleteData = async (id) => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                `DELETE FROM Users Where ID=${id}`,
+                [],
+                () => { alert("Data Deleted SuccessFully"), navigation.navigate("Home") },
+                error => { console.log(error) }
+            )
+        })
+    }
 
 
 
@@ -49,17 +100,17 @@ const Home = ({ navigation }) => {
                         <Text style={{
                             fontSize: moderateScale(12),
                             color: colors.blackOpacity80
-                        }}>{item.email}</Text>
+                        }}>{item.Email}</Text>
                         <Text style={{
                             fontSize: moderateScale(12),
                             fontWeight: 'bold',
                             color: colors.black,
                             marginTop: moderateVerticalScale(8),
-                        }} >{item?.first_name}</Text>
-                        <Text style={{
+                        }} >{item?.Name}</Text>
+                        {/* <Text style={{
                             fontSize: moderateScale(12),
                             color: colors.blackOpacity50,
-                        }}><FontAwesome5 name='map-marker-alt' /> {item?.last_name}</Text>
+                        }}><FontAwesome5 name='map-marker-alt' /> {item?.last_name}</Text> */}
                     </View>
                     <Image source={{ uri: !!item.avatar ? item.avatar : "https://thumbs.dreamstime.com/b/user-profile-icon-creative-trendy-colorful-round-button-illustration-isolated-156511788.jpg" }}
                         style={{
@@ -85,6 +136,11 @@ const Home = ({ navigation }) => {
                                 backgroundColor: colors.white,
                                 borderColor: colors.themeColor
                             }}
+                            onPress={() => {
+                                console.log("ID " + item.ID)
+                                deleteData(item.ID)
+                                // navigation.navigate("Register")
+                            }}
                             btnTextStyle={{
                                 color: colors.themeColor
                             }}
@@ -100,7 +156,7 @@ const Home = ({ navigation }) => {
                                     name: item?.name,
                                     address: item?.address,
                                 }
-                                navigation.navigate("Profile", { data: data })
+                                navigation.navigate("Register")
                             }}
                         />
                     </View>
@@ -117,14 +173,14 @@ const Home = ({ navigation }) => {
                     {/* <Text  /> */}
                     <View />
                     <Text style={styles.headerText}>Nanny Line</Text>
-                    <TouchableOpacity onPress={GooglesignIncancled}>
+                    <TouchableOpacity onPress={navigation.navigate("Home")}>
                         <FontAwesome5 size={20} color={colors.themeColor} name={'sign-out-alt'} />
                     </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1, marginTop: moderateVerticalScale(10), marginHorizontal: moderateScale(16) }}>
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        data={users}
+                        data={data}
                         renderItem={renderItem}
                         ItemSeparatorComponent={() => <View style={{ marginBottom: moderateVerticalScale(16) }} />}
                     />

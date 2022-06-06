@@ -11,6 +11,7 @@ import {
     ChooseAccount,
     ForgetPassword,
     SetPassword,
+    Home,
 } from '../screens';
 import HeaderComp from '../Components/HeaderComp';
 import { } from 'react-native-safe-area-context';
@@ -33,6 +34,7 @@ export default function AuthStack() {
         }}>
             <Stack.Screen options={{ headerShown: false }} name={Constants.LOGIN} component={Login} />
             <Stack.Screen name={Constants.REGISTER} component={Register} />
+            <Stack.Screen name={"Home"} options={{ headerShown: false }} component={Home} />
             <Stack.Screen name={Constants.RegisterAddress} component={RegisterAddress} />
             <Stack.Screen name={Constants.CHOOSE_ACCOUNT} component={ChooseAccount} />
             <Stack.Screen name={Constants.FORGET_PASSWORD} component={ForgetPassword} />
