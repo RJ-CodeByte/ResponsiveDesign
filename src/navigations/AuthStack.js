@@ -14,7 +14,6 @@ import {
     Home,
 } from '../screens';
 import HeaderComp from '../Components/HeaderComp';
-import { } from 'react-native-safe-area-context';
 import RegisterAddress from '../screens/Register/RegiserAddress';
 
 const Stack = createStackNavigator();

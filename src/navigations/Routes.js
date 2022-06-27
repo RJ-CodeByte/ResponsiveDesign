@@ -4,16 +4,25 @@ import AuthStack from './AuthStack';
 import * as React from 'react';
 import HomeStack from './HomeStack';
 import { useSelector, useDispatch } from 'react-redux';
-
-import { forModalPresentationIOS } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/CardStyleInterpolators';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Routes() {
-    const { token } = useSelector(state => state.userReducer)
-    return (
 
+    const [token, setToken] = React.useState(null);
+
+
+    React.useEffect(() => {
+        AsyncStorage.getItem("myToken").then(tkn => {
+            console.log('tkn', tkn)
+            setToken(tkn)
+        }).catch(err => console.log(err))
+
+    }, [])
+
+    return (
         <NavigationContainer>
-            {!!token ? <HomeStack /> : <AuthStack />}
+            {!token ? <AuthStack /> : <HomeStack />}
         </NavigationContainer>
     );
 }

@@ -3,6 +3,7 @@ import auth from '@react-native-firebase/auth';
 import { LOGIN, SIGNUP, UserList } from '../../config/urls'
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import types from '../types'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export const userLogin = (email, password) => {
@@ -21,11 +22,13 @@ export const userLogin = (email, password) => {
                 data: data,
             }).then((res) => {
                 if (res.status == 200) {
-                    dispatch({
-                        type: types.LOGIN,
-                        payload: res
+                    AsyncStorage.setItem("myToken", JSON.stringify(res.data)).then(token => {
+                        dispatch({
+                            type: types.LOGIN,
+                            payload: res.data
+                        })
                     })
-                    console.log(res)
+                    console.log(res.data)
                 }
 
             }).catch(e => console.log(e))
@@ -96,14 +99,16 @@ export const onGoogleButtonPress = () => {
                     payload: false
                 });
                 const { idToken } = await GoogleSignin.signIn();
-
+                console.log("token", idToken)
                 // Create a Google credential with the token
                 dispatch({
                     type: types.IS_LOADING,
                     payload: true
                 });
                 const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+                console.log(googleCredential)
                 await auth().signInWithCredential(googleCredential).then((cred) => {
+                    console.log("user:", cred.user)
                     const { uid } = cred.user;
                     dispatch({
                         type: types.LOGIN,
@@ -138,10 +143,19 @@ export const registerFirebaseUser = async (mail, password) => {
 export const userLogout = () => {
     try {
         return dispatch => {
-            dispatch({
-                type: types.LOGIN,
-                payload: ''
+            // auth().signOut().then(() =>
+            //     dispatch({
+            //         type: types.LOGIN,
+            //         payload: null
+            //     })
+            // )            
+            AsyncStorage.removeItem("myToken").then(() => {
+                dispatch({
+                    type: types.LOGIN,
+                    payload: null
+                })
             })
+
         }
     } catch (error) {
         console.log(error);

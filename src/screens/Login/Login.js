@@ -24,6 +24,7 @@ import { loginFirebaseUser, onGoogleButtonPress, userLogin } from '../../Redux/a
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import SnackBar from 'react-native-snackbar-component';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
 
@@ -35,6 +36,7 @@ const Login = ({ navigation }) => {
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
+    const [token, setToken] = React.useState(null)
 
 
     useEffect(() => {
@@ -42,9 +44,14 @@ const Login = ({ navigation }) => {
             webClientId: '321735861258-50dtq7v8l77qrt2fo5te2cde52cpjb56.apps.googleusercontent.com',
             offlineAccess: true,
         })
-        console.log(isLoading)
     }, [])
 
+    const getToken = () => {
+        AsyncStorage.getItem("myToken").then(tkn => {
+            let myToken = tkn
+            setToken(myToken)
+        }).then(() => navigation.navigate("TabRoutes"))
+    }
 
 
     const validateEmail = (email) => {
@@ -79,14 +86,17 @@ const Login = ({ navigation }) => {
 
     const logeedIn = async () => {
         console.log("asda" + JSON.stringify(validation()));
-        if (!validation()) { dispatch(loginFirebaseUser(email, password)) }
+        if (!validation()) { dispatch(userLogin(email, password)) }
+        getToken()
 
     }
 
     const socialLogeedIn = async () => {
         // dispatch(userLogin(email, password)),
+        // AsyncStorage.setItem('googleToken',)        
         dispatch(onGoogleButtonPress())
     }
+
 
 
 
@@ -143,7 +153,7 @@ const Login = ({ navigation }) => {
             </TouchableOpacity >
             <SnackBar visible={isLoading} autoHidingTime={1000} textMessage="Login Success" />
             <View style={styles.bottomView}>
-                <Text>Not A Member? </Text>
+                <Text>Not A Member?</Text>
                 <TouchableOpacity activeOpacity={0.7} onPress={() => { navigation.navigate(Constants.CHOOSE_ACCOUNT) }}><Text style={{ fontWeight: 'bold' }}>Join Now</Text></TouchableOpacity>
             </View>
         </View >
