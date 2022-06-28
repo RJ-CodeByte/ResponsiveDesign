@@ -13,28 +13,16 @@ import SQLite from 'react-native-sqlite-storage'
 import { useDispatch } from 'react-redux'
 
 
-const errorCB = (err) => {
-    console.log("SQL Error: " + err);
-};
-
-const successCB = () => {
-    console.log("SQL executed fine");
-};
-
-const openCB = () => {
-    console.log("Database OPENED");
-};
-
 const db = SQLite.openDatabase(
     {
         name: 'MainDB.db',
         location: 'Library'
     },
     () => { },
-    error => { console.log("errorrrrrrr", error) }
+    error => { console.log(error) }
 );
 
-const Register = ({ navigation }) => {
+const Edit = ({ navigation, route }) => {
     const [isActive, setIsActive] = useState(false)
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -42,43 +30,68 @@ const Register = ({ navigation }) => {
     const [password, setPassword] = useState('')
     const [Dob, setDob] = useState('')
     const [contact, setContact] = useState(0)
+    const [data, setData] = useState({})
+
     const [IsVisible, setIsVisible] = useState(true);
     const dispatch = useDispatch()
+    const { id } = route.params
 
     useEffect(() => {
-        createTable();
+        console.log(id)
+        getData(id);
     }, [])
 
 
 
-    const createTable = () => {
+    const getData = async (id) => {
         db.transaction((tx) => {
             tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS "
-                + "Users "
-                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Email TEXT, Dob TEXT, Contact BIGINT);"
+                `SELECT * FROM Users Where ID=${id}`,
+                [],
+                (tx, result) => {
+                    // var len = result.rows.length;
+                    // console.log(len);
+                    var user;
+                    // let newData = []
+                    // if (len > 0) {
+                    //     for (let index = 0; index < len; index++) {
+                    user = result.rows.item(0);
+                    // newData.push(user)
+                    console.log({ user })
+                    //     }
+                    setFirstName(user.Name)
+                    setDob(user.Dob)
+                    setContact(JSON.stringify(user.Contact))
+                    setEmailAddress(user.Email)
+                    // setData(user);
+                    // }
+                    // console.log(result.rows.item(0));
+                }
             )
         })
     }
 
 
-
-    const setData = async () => {
+    const EditData = async () => {
         try {
             await db.transaction(async (tx) => {
                 await tx.executeSql(
-                    "INSERT INTO Users (Name, Email, Dob, Contact) VALUES (?,?,?,?)",
-                    [firstName, email, Dob, contact]
+                    `UPDATE Users SET Name=?,Email=?,Dob=?,Contact=? WHERE ID=${id}`,
+                    [firstName, email, Dob, contact],
+                    (result) => {
+                        console.log(result)
+                    }
                 )
             })
-            console.log("addeddd")
-            dispatch(registeracess())
-            navigation.navigate('DrawerStack');
+            alert("Data Updated SuccessFully")
+            navigation.goBack();
         }
         catch (err) {
             console.log("Error" + err);
         }
     }
+
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -89,18 +102,20 @@ const Register = ({ navigation }) => {
                         <TextInputWithLabel
                             label={'First Name'}
                             placeholder="Enter Your first name"
+                            value={firstName}
+                            // defaultValue={data.Name}
                             inputStyle={{ flex: 1 }}
                             keyboardType='email-address'
                             onChangeText={(fname) => { setFirstName(fname) }}
                         />
                         <View style={{ marginHorizontal: moderateScale(8) }} />
-                        <TextInputWithLabel
+                        {/* <TextInputWithLabel
                             label={'Last Name'}
                             placeholder="Enter Your last name"
                             inputStyle={{ flex: 1 }}
                             keyboardType='email-address'
                             onChangeText={(lname) => { setLastName(lname) }}
-                        />
+                        /> */}
                     </View>
                     {/* <TextInputWithLabel
                         label={'Salon Name'}
@@ -111,26 +126,31 @@ const Register = ({ navigation }) => {
                     /> */}
                     <TextInputWithLabel
                         label={'Date of Birth'}
+                        value={Dob}
                         placeholder="Enter Your DOB"
                         inputStyle={{ marginVertical: moderateVerticalScale(28) }}
                         onChangeText={(dob) => { setDob(dob) }}
                     />
                     <TextInputWithLabel
                         label={'Phone Number'}
-                        placeholder="Enter Your last name"
+                        placeholder="Enter Your Phone Number"
+                        value={contact}
+                        // defaultValue={JSON.stringify(data.Contact)}
                         inputStyle={{ marginBottom: moderateVerticalScale(20) }}
                         keyboardType='number-pad'
                         onChangeText={(number) => { setContact(number) }}
                     />
                     <TextInputWithLabel
                         label={'Email'}
+                        value={email}
+                        // defaultValue={data.Email}
                         placeholder="Enter Your Email Address"
                         inputStyle={{ marginBottom: moderateVerticalScale(20) }}
                         keyboardType='email-address'
                         autoCapitalize={'none'}
                         onChangeText={(email) => { setEmailAddress(email) }}
                     />
-                    <TextInputWithLabel
+                    {/* <TextInputWithLabel
                         label={'Password'}
                         placeholder="Enter Your password"
                         secureTextEntry={IsVisible}
@@ -139,7 +159,7 @@ const Register = ({ navigation }) => {
                         rightIcon={IsVisible ? ImagePath.hideEye : ImagePath.showEye}
                         // inputStyle={{ marginVertical: moderateVerticalScale(100) }}
                         onChangeText={(password) => { setPassword(password) }}
-                    />
+                    /> */}
                     {/* <View style={{ flexDirection: 'row' }}>
                         <TextInputWithLabel
                             label={'Country'}
@@ -182,7 +202,7 @@ const Register = ({ navigation }) => {
                             marginVertical: moderateVerticalScale(20)
                         }}
                         onPress={
-                            setData
+                            EditData
                             // registerFirebaseUser(email, password).then(() => navigation.navigate(navigationStrings.LOGIN));
                             // var user = {
                             //     firstName: firstName,
@@ -200,4 +220,4 @@ const Register = ({ navigation }) => {
     )
 }
 
-export default Register
+export default Edit

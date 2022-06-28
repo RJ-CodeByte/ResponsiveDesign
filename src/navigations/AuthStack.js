@@ -15,6 +15,7 @@ import {
 } from '../screens';
 import HeaderComp from '../Components/HeaderComp';
 import RegisterAddress from '../screens/Register/RegiserAddress';
+import TabRoutes from './TabRoutes';
 
 const Stack = createStackNavigator();
 
@@ -33,7 +34,8 @@ export default function AuthStack() {
         }}>
             <Stack.Screen options={{ headerShown: false }} name={Constants.LOGIN} component={Login} />
             <Stack.Screen name={Constants.REGISTER} component={Register} />
-            <Stack.Screen name={"Home"} options={{ headerShown: false }} component={Home} />
+            <Stack.Screen name={"TabRoutes"} options={{ headerShown: false }} component={TabRoutes} />
+            {/* <Stack.Screen name={"Home"} options={{ headerShown: false }} component={Home} /> */}
             <Stack.Screen name={Constants.RegisterAddress} component={RegisterAddress} />
             <Stack.Screen name={Constants.CHOOSE_ACCOUNT} component={ChooseAccount} />
             <Stack.Screen name={Constants.FORGET_PASSWORD} component={ForgetPassword} />

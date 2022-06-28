@@ -4,7 +4,8 @@ import Constants from '../constants/navigationStrings'
 import TabRoutes from './TabRoutes';
 import DrawerStack from './DrawerStack';
 import Feed from '../screens/DrawerPages/Feed';
-import { Home, Login } from '../screens';
+import { Home, Login, Register } from '../screens';
+import Edit from '../screens/Home/Edit';
 
 const Stack = createStackNavigator();
 
@@ -13,8 +14,8 @@ export default function HomeStack() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             {/* <Stack.Screen options={{ headerShown: false }} name={Constants.TabRoutes} component={TabRoutes} /> */}
             <Stack.Screen name={Constants.DrawerStack} component={DrawerStack} />
-            <Stack.Screen options={{ headerShown: false }} name={Constants.LOGIN} component={Login} />
-            <Stack.Screen options={{ headerShown: false }} name={Constants.TabRoutes} component={TabRoutes} />
+            {/* <Stack.Screen name={Constants.TabRoutes} component={TabRoutes} /> */}
+            <Stack.Screen name={"Edit"} options={{ headerShown: true }} component={Edit} />
         </Stack.Navigator>
     );
 }

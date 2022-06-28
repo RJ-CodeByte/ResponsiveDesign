@@ -19,16 +19,11 @@ export default function TabRoutes({ route }) {
                 tabBarInactiveTintColor: colors.black
             }}
         >
-            {/* <BottomTab.Screen options={{
-                tabBarIcon: ({ focused }) => {
-                    return <FontAwesome5 size={20} color={focused ? colors.themeColor : colors.black} name={'home'} />
-                }
-            }} name="Home" component={Home} /> */}
             <BottomTab.Screen options={{
                 tabBarIcon: ({ focused }) => {
                     return <FontAwesome5 size={20} color={focused ? colors.themeColor : colors.black} name={'home'} />
                 }
-            }} name="Home" component={HomeLocal} />
+            }} name="Home" component={Home} />
             <BottomTab.Screen options={{
                 tabBarIcon: ({ focused }) => {
                     return <FontAwesome5 color={focused ? colors.themeColor : colors.black} size={20} name={'book'} />

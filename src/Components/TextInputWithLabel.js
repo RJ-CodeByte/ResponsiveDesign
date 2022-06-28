@@ -12,7 +12,9 @@ const TextInputWithLabel = ({
     inputStyle = {},
     rightIcon,
     error,
+    value,
     onPressRight,
+    defaultValue,
     ...props
 }) => {
     return (
@@ -23,6 +25,8 @@ const TextInputWithLabel = ({
                     <TextInput
                         style={styles.inlineStyle}
                         placeholder={placeholder}
+                        value={value}
+                        defaultValue={defaultValue}
                         onChangeText={onChangeText}
                         {...props}
 

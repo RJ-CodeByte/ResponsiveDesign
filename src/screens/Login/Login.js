@@ -20,7 +20,7 @@ import ButtonComp from '../../Components/ButttonComp';
 import Constants from '../../constants/navigationStrings';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginFirebaseUser, onGoogleButtonPress, userLogin } from '../../Redux/actions/auth';
+import { loginFirebaseUser, onGoogleButtonPress, registerFirebaseUser, userLogin } from '../../Redux/actions/auth';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import SnackBar from 'react-native-snackbar-component';
@@ -50,7 +50,7 @@ const Login = ({ navigation }) => {
         AsyncStorage.getItem("myToken").then(tkn => {
             let myToken = tkn
             setToken(myToken)
-        }).then(() => navigation.navigate("TabRoutes"))
+        }).then(() => navigation.navigate("Home"))
     }
 
 
@@ -86,9 +86,9 @@ const Login = ({ navigation }) => {
 
     const logeedIn = async () => {
         console.log("asda" + JSON.stringify(validation()));
-        if (!validation()) { dispatch(userLogin(email, password)) }
-        getToken()
-
+        // if (!validation()) { dispatch(userLogin(email, password)) }
+        // if (!validation()) { dispatch(loginFirebaseUser(email, password)) }
+        // getToken()
     }
 
     const socialLogeedIn = async () => {

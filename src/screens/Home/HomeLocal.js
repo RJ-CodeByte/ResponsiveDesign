@@ -14,89 +14,88 @@ import { userList, userLogout } from '../../Redux/actions/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import SQLite from 'react-native-sqlite-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const db = SQLite.openDatabase(
-    {
-        name: 'MainDB.db',
-        location: 'Library'
-    },
-    () => { },
-    error => { console.log(error) }
-);
+// const db = SQLite.openDatabase(
+//     {
+//         name: 'MainDB',
+//         location: 'default'
+//     },
+//     () => { },
+//     error => { console.log(error) }
+// );
 
-const Home = ({ navigation }) => {
+const HomeLocal = ({ navigation }) => {
     const { users } = useSelector(state => state.userReducer)
     const dispatch = useDispatch()
 
-    const [data, setData] = useState([])
+    // const [data, setData] = useState([])
 
     useEffect(() => {
-        navigation.addListener('focus', () => {
-            getData();
-        })
+        dispatch(userList())
     }, [])
-
-
-
 
     const logOut = () => {
         dispatch(userLogout());
+        // navigation.replace("Login")
         alert('Your are signed out!');
         // console.log('users', token)
     }
 
-    const getData = async () => {
-        db.transaction((tx) => {
-            tx.executeSql(
-                "SELECT * FROM Users",
-                [],
-                (tx, result) => {
-                    var len = result.rows.length;
-                    console.log(len);
-                    var user;
-                    let newData = []
-                    if (len > 0) {
-                        for (let index = 0; index < len; index++) {
-                            user = result.rows.item(index);
-                            newData.push(user)
-                            console.log(newData)
-                        }
-                        setData(newData);
-                    }
-                }
-            )
-        })
-    }
 
 
-    const deleteData = async (id) => {
-        db.transaction((tx) => {
-            tx.executeSql(
-                `DELETE FROM Users Where ID=${id}`,
-                [],
-                () => { alert("Data Deleted SuccessFully"), setData(data.filter(item => item.ID !== id)) },
-                error => { console.log(error) }
-            )
-        })
-    }
+    // const getData = async () => {
+    //     db.transaction((tx) => {
+    //         tx.executeSql(
+    //             "SELECT * FROM Users",
+    //             [],
+    //             (tx, result) => {
+    //                 var len = result.rows.length;
+    //                 console.log(len);
+    //                 var user;
+    //                 let newData = []
+    //                 if (len > 0) {
+    //                     for (let index = 0; index < len; index++) {
+    //                         user = result.rows.item(index);
+    //                         newData.push(user)
+    //                         console.log(newData)
+    //                     }
+    //                     setData(newData);
+    //                 }
+    //             }
+    //         )
+    //     })
+    // }
+
+
+    // const deleteData = async (id) => {
+    //     db.transaction((tx) => {
+    //         tx.executeSql(
+    //             `DELETE FROM Users Where ID=${id}`,
+    //             [],
+    //             () => { alert("Data Deleted SuccessFully"), navigation.navigate("Home") },
+    //             error => { console.log(error) }
+    //         )
+    //     })
+    // }
 
 
 
-    // const GooglesignIncancled = async () => {
-    //     try {
-    //         // await GoogleSignin.revokeAccess().then(() => console.log("Log Out"));
-    //         // await GoogleSignin.signOut().then(() => console.log("Log Out"));
-    //         await auth()
-    //             .signOut()
-    //             .then(() => {
-    //                 dispatch(userLogout());
-    //                 alert('Your are signed out!');
-    //             });
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
+    // await GoogleSignin.revokeAccess().then(() => console.log("Log Out"));
+    // await GoogleSignin.signOut().then(() => console.log("Log Out"));
+    const GooglesignIncancled = async () => {
+        try {
+            await GoogleSignin.revokeAccess().then(() => console.log("Log Out"));
+            await GoogleSignin.signOut().then(() => console.log("Log Out"));
+            dispatch(userLogout());
+            alert('Your are signed out!');
+            console.log('users', token)
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const renderItem = ({ item }) => {
         return (
@@ -106,13 +105,13 @@ const Home = ({ navigation }) => {
                         <Text style={{
                             fontSize: moderateScale(12),
                             color: colors.blackOpacity80
-                        }}>{item.Email}</Text>
+                        }}>{item?.email}</Text>
                         <Text style={{
                             fontSize: moderateScale(12),
                             fontWeight: 'bold',
                             color: colors.black,
                             marginTop: moderateVerticalScale(8),
-                        }} >{item?.Name}</Text>
+                        }} >{item?.first_name}</Text>
                         {/* <Text style={{
                             fontSize: moderateScale(12),
                             color: colors.blackOpacity50,
@@ -131,7 +130,7 @@ const Home = ({ navigation }) => {
                         color: colors.blackOpacity50,
                         textTransform: 'uppercase'
                     }}>price</Text>
-                    <Text>{item?.price}</Text>
+                    <Text>{item?.price ?? 30}</Text>
                 </View>
                 <View style={styles.flexView}>
                     <View style={{ flex: 1 }}>
@@ -144,7 +143,7 @@ const Home = ({ navigation }) => {
                             }}
                             onPress={() => {
                                 // console.log("ID " + item.ID)
-                                deleteData(item.ID)
+                                // deleteData(item.ID)
                                 // navigation.navigate("Register")
                             }}
                             btnTextStyle={{
@@ -162,7 +161,7 @@ const Home = ({ navigation }) => {
                                     name: item?.name,
                                     address: item?.address,
                                 }
-                                navigation.navigate("Edit", { id: item.ID })
+                                navigation.navigate("Register")
                             }}
                         />
                     </View>
@@ -186,7 +185,7 @@ const Home = ({ navigation }) => {
                 <View style={{ flex: 1, marginTop: moderateVerticalScale(10), marginHorizontal: moderateScale(16) }}>
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        data={data}
+                        data={users}
                         renderItem={renderItem}
                         ItemSeparatorComponent={() => <View style={{ marginBottom: moderateVerticalScale(16) }} />}
                     />
@@ -196,4 +195,4 @@ const Home = ({ navigation }) => {
     )
 }
 
-export default Home
+export default HomeLocal

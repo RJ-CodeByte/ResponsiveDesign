@@ -8,17 +8,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Routes() {
+    const { token } = useSelector(state => state.userReducer)
+    // const [token, setToken] = React.useState(null);
 
-    const [token, setToken] = React.useState(null);
 
+    // React.useEffect(() => {
+    //     AsyncStorage.getItem("myToken").then(tkn => {
+    //         console.log('tkn', tkn)
+    //         setToken(tkn)
+    //     }).catch(err => console.log(err))
 
-    React.useEffect(() => {
-        AsyncStorage.getItem("myToken").then(tkn => {
-            console.log('tkn', tkn)
-            setToken(tkn)
-        }).catch(err => console.log(err))
-
-    }, [])
+    // }, [])
 
     return (
         <NavigationContainer>

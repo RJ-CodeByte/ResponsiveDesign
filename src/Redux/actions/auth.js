@@ -73,13 +73,23 @@ export const loginFirebaseUser = (email, password) => {
             try {
                 console.log("errr")
                 await auth().signInWithEmailAndPassword(email, password).then(() => auth().onAuthStateChanged(user => {
-                    dispatch({
-                        type: types.LOGIN,
-                        payload: user.uid
-                    }),
-                        console.log(user.id)
+                    // console.log(user.getIdToken(true))
+                    // dispatch({
+                    //     type: types.LOGIN,
+                    //     payload: user.uid
+                    // }),
+                    console.log(user.id)
                 }
                 ));
+                var idToken = await auth().currentUser.getIdToken(true)
+                AsyncStorage.setItem("myToken", JSON.stringify(idToken)).then(token => {
+                    dispatch({
+                        type: types.LOGIN,
+                        payload: idToken
+                    })
+                })
+                console.log(idToken)
+
             } catch (err) {
                 console.log(err);
             }
@@ -106,7 +116,7 @@ export const onGoogleButtonPress = () => {
                     payload: true
                 });
                 const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-                console.log(googleCredential)
+                // console.log(googleCredential)
                 await auth().signInWithCredential(googleCredential).then((cred) => {
                     console.log("user:", cred.user)
                     const { uid } = cred.user;
@@ -140,6 +150,20 @@ export const registerFirebaseUser = async (mail, password) => {
     }
 }
 
+export const registeracess = () => {
+    try {
+        return dispatch => {
+            // console.log("user data", res.data.data)            
+            dispatch({
+                type: types.LOGIN,
+                payload: "asdjknajksdajksdnaj"
+            })
+        }
+    } catch (err) {
+        console.log('err', err)
+    }
+}
+
 export const userLogout = () => {
     try {
         return dispatch => {
@@ -150,10 +174,12 @@ export const userLogout = () => {
             //     })
             // )            
             AsyncStorage.removeItem("myToken").then(() => {
-                dispatch({
-                    type: types.LOGIN,
-                    payload: null
-                })
+                auth().signOut().then(() =>
+                    dispatch({
+                        type: types.LOGIN,
+                        payload: null
+                    })
+                )
             })
 
         }

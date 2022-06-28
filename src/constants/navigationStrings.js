@@ -7,5 +7,5 @@ export default {
     SET_PASSWORD: 'SetPassword',
     HOME: 'Home',
     TabRoutes: 'TabRoutes',
-    DrawerStack: 'DrawerStack',
+    DrawerStack: 'DrawerStack', 
 }
