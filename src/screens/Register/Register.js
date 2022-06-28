@@ -83,7 +83,7 @@ const Register = ({ navigation }) => {
             })
             console.log("addeddd")
             dispatch(registeracess())
-            navigation.navigate('DrawerStack');
+            navigation.replace('DrawerStack');
         }
         catch (err) {
             console.log("Error" + err);
