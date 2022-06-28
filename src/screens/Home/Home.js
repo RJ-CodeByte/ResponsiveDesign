@@ -55,6 +55,7 @@ const Home = ({ navigation }) => {
     const logOut = () => {
         dispatch(userLogout());
         alert('Your are signed out!');
+        // navigation.replace("Login")
         // console.log('users', token)
     }
 

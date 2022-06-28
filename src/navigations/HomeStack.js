@@ -14,8 +14,8 @@ export default function HomeStack() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             {/* <Stack.Screen options={{ headerShown: false }} name={Constants.TabRoutes} component={TabRoutes} /> */}
             <Stack.Screen name={Constants.DrawerStack} component={DrawerStack} />
-            {/* <Stack.Screen name={Constants.TabRoutes} component={TabRoutes} /> */}
-            <Stack.Screen name={"Edit"} options={{ headerShown: true }} component={Edit} />
+            <Stack.Screen name={Constants.EDIT} options={{ headerShown: true }} component={Edit} />
+            {/* <Stack.Screen name={Constants.LOGIN} component={Login} /> */}
         </Stack.Navigator>
     );
 }
