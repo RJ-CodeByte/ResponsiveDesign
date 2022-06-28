@@ -17,14 +17,8 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={Store}>
-        <View style={styles.container}>
-          <StatusBar
-            animated={true}
-            backgroundColor="transparent"
-            barStyle={'dark-content'}
-            translucent={true}
-          />
 
+        <View style={styles.container}>
           <Routes />
           {/* <Text>App</Text> */}
         </View>

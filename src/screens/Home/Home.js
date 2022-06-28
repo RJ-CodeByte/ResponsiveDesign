@@ -16,14 +16,26 @@ import auth from '@react-native-firebase/auth';
 import SQLite from 'react-native-sqlite-storage'
 
 
+
+// if (Platform.OS === 'ios') {
+//     const db = SQLite.openDatabase(
+//         {
+//             name: 'MainDB.db',
+//             location: 'Library'
+//         },
+//         () => { },
+//         error => { console.log("errorrrrrrr", error) }
+//     );
+// } else {
 const db = SQLite.openDatabase(
     {
         name: 'MainDB.db',
-        location: 'Library'
+        location: 'default'
     },
     () => { },
-    error => { console.log(error) }
+    error => { console.log("errorrrrrrr", error) }
 );
+// }
 
 const Home = ({ navigation }) => {
     const { users } = useSelector(state => state.userReducer)

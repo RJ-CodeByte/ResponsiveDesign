@@ -3,6 +3,7 @@ import { moderateScale, moderateVerticalScale, scale } from 'react-native-size-m
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        marginTop: '2%',
         paddingHorizontal: moderateScale(24),
     },
     headingText: {

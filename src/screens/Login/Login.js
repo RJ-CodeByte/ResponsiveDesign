@@ -9,7 +9,8 @@ import {
     Keyboard,
     Dimensions,
     SafeAreaView,
-    ScrollView
+    ScrollView,
+    StatusBar
 } from 'react-native';
 import { scale, verticalScale, moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import React, { useState, useEffect } from 'react';
@@ -25,9 +26,10 @@ import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import SnackBar from 'react-native-snackbar-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 const Login = ({ navigation }) => {
-
+    const isFocused = useIsFocused();
 
     const { isLoading } = useSelector(state => state.userReducer)
     const dispatch = useDispatch()
@@ -102,7 +104,13 @@ const Login = ({ navigation }) => {
 
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} >
+            {isFocused && <StatusBar
+                animated={false}
+                backgroundColor="transparent"
+                barStyle={'light-content'}
+                translucent
+            />}
             <TouchableOpacity activeOpacity={1} onPress={() => Keyboard.dismiss()}>
                 <ImageBackground
                     style={styles.imageStyle}

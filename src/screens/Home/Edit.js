@@ -13,14 +13,26 @@ import SQLite from 'react-native-sqlite-storage'
 import { useDispatch } from 'react-redux'
 
 
-const db = SQLite.openDatabase(
-    {
-        name: 'MainDB.db',
-        location: 'Library'
-    },
-    () => { },
-    error => { console.log(error) }
-);
+
+if (Platform.OS == 'ios') {
+    const db = SQLite.openDatabase(
+        {
+            name: 'MainDB.db',
+            location: 'Library'
+        },
+        () => { },
+        error => { console.log("errorrrrrrr", error) }
+    );
+} else {
+    const db = SQLite.openDatabase(
+        {
+            name: 'MainDB.db',
+            location: 'default'
+        },
+        () => { },
+        error => { console.log("errorrrrrrr", error) }
+    );
+}
 
 const Edit = ({ navigation, route }) => {
     const [isActive, setIsActive] = useState(false)

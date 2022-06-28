@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Platform, TouchableOpacity, ActivityIndicator, Modal } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import ButtonComp from '../../Components/ButttonComp'
 import navigationStrings from '../../constants/navigationStrings'
@@ -24,15 +24,25 @@ const successCB = () => {
 const openCB = () => {
     console.log("Database OPENED");
 };
-
+// if (Platform.OS == 'ios') {
+//     const db = SQLite.openDatabase(
+//         {
+//             name: 'MainDB.db',
+//             location: 'Library'
+//         },
+//         () => { },
+//         error => { console.log("errorrrrrrr", error) }
+//     );
+// } else {
 const db = SQLite.openDatabase(
     {
         name: 'MainDB.db',
-        location: 'Library'
+        location: 'default'
     },
     () => { },
     error => { console.log("errorrrrrrr", error) }
 );
+// }
 
 const Register = ({ navigation }) => {
     const [isActive, setIsActive] = useState(false)
