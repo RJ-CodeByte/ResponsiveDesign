@@ -4,7 +4,8 @@ import types from "../types";
 const initialState = {
     token: null,
     isLoading: false,
-    users:[]
+    userInfo: {},
+    users: []
 }
 
 function userReducer(state = initialState, action) {
@@ -13,6 +14,8 @@ function userReducer(state = initialState, action) {
             return { ...state, token: action.payload };
         case types.IS_LOADING:
             return { ...state, isLoading: action.payload };
+        case types.USERINFO:
+            return { ...state, userInfo: action.payload };
         case types.USER_LIST:
             return { ...state, users: action.payload };
         default:

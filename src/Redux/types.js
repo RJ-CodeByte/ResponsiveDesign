@@ -3,6 +3,7 @@ export default {
     SIGNUP: "SIGNUP",
     STATUS: "STATUS",
     IS_LOADING: "IS_LOADING",
-    USER_LIST: 'USER_LIST'
+    USER_LIST: 'USER_LIST',
+    USERINFO: 'USERINFO'
 
 }

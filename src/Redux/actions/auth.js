@@ -3,6 +3,7 @@ import auth from '@react-native-firebase/auth';
 import { LOGIN, SIGNUP, UserList } from '../../config/urls'
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import types from '../types'
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -30,7 +31,6 @@ export const userLogin = (email, password) => {
                     })
                     console.log(res.data)
                 }
-
             }).catch(e => console.log(e))
         }
     } catch (error) {
@@ -41,7 +41,6 @@ export const userLogin = (email, password) => {
 export const userList = () => {
     try {
         return async dispatch => {
-
             const result = await axios({
                 method: 'GET',
                 url: UserList,
@@ -55,9 +54,7 @@ export const userList = () => {
                         type: types.USER_LIST,
                         payload: res.data.data
                     })
-
                 }
-
             }).catch(e => console.log(e))
         }
     } catch (error) {
@@ -119,6 +116,10 @@ export const onGoogleButtonPress = () => {
                 // console.log(googleCredential)
                 await auth().signInWithCredential(googleCredential).then((cred) => {
                     console.log("user:", cred.user)
+                    dispatch({
+                        type: types.USERINFO,
+                        payload: cred.user
+                    })
                     const { uid } = cred.user;
                     dispatch({
                         type: types.LOGIN,
@@ -138,6 +139,58 @@ export const onGoogleButtonPress = () => {
     }
 }
 
+export const onFbloginBtnPressed = () => {
+    try {
+        return async dispatch => {
+            try {
+
+                const result = await LoginManager.logInWithPermissions(['public_profile', 'email',], 'limited',
+                    'my_nonce');
+
+                console.log('result', result)
+
+                if (result.isCancelled) {
+                    throw 'User cancelled the login process';
+                }
+
+                // Once signed in, get the users AccesToken
+                const data = await AccessToken.getCurrentAccessToken();
+
+                if (!data) {
+                    throw 'Something went wrong obtaining access token';
+                }
+                console.log('data', data)
+
+                // Create a Firebase credential with the AccessToken
+                const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+                // Sign-in the user with the credential
+                const userData = auth().signInWithCredential(facebookCredential);
+                dispatch({
+                    type: types.LOGIN,
+                    payload: facebookCredential.token
+                });
+                const userInfo = (await userData).additionalUserInfo
+                console.log('userInfo', userInfo)
+                dispatch({
+                    type: types.USERINFO,
+                    payload: userInfo.profile
+                })
+
+
+                auth().onAuthStateChanged((user) => {
+                    if (user) {
+                        console.log('User email: ', user);
+                    }
+                });
+                console.log('userData', (await userData).user)
+            } catch (error) {
+                console.log('error', error)
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 export const registerFirebaseUser = async (mail, password) => {
     try {
@@ -172,7 +225,9 @@ export const userLogout = () => {
             //         type: types.LOGIN,
             //         payload: null
             //     })
-            // )            
+            // )          
+            GoogleSignin.signOut()
+
             AsyncStorage.removeItem("myToken").then(() => {
                 auth().signOut().then(() =>
                     dispatch({

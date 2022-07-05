@@ -21,12 +21,14 @@ import ButtonComp from '../../Components/ButttonComp';
 import Constants from '../../constants/navigationStrings';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginFirebaseUser, onGoogleButtonPress, registerFirebaseUser, userLogin } from '../../Redux/actions/auth';
+import { loginFirebaseUser, onFbloginBtnPressed, onGoogleButtonPress, registerFirebaseUser, userLogin } from '../../Redux/actions/auth';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import SnackBar from 'react-native-snackbar-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import navigationStrings from '../../constants/navigationStrings';
 
 const Login = ({ navigation }) => {
     const isFocused = useIsFocused();
@@ -52,7 +54,7 @@ const Login = ({ navigation }) => {
         AsyncStorage.getItem("myToken").then(tkn => {
             let myToken = tkn
             setToken(myToken)
-        }).then(() => navigation.navigate("Home"))
+        }).then(() => navigation.navigate(navigationStrings.TabRoutes))
     }
 
 
@@ -97,8 +99,36 @@ const Login = ({ navigation }) => {
         // dispatch(userLogin(email, password)),
         // AsyncStorage.setItem('googleToken',)        
         dispatch(onGoogleButtonPress())
+        // getToken()
+
     }
 
+    // const onFbloginBtnPressed = async () => {
+    //     try {
+
+    //         const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+    //         if (result.isCancelled) {
+    //             throw 'User cancelled the login process';
+    //         }
+
+    //         // Once signed in, get the users AccesToken
+    //         const data = await AccessToken.getCurrentAccessToken();
+
+    //         if (!data) {
+    //             throw 'Something went wrong obtaining access token';
+    //         }
+
+    //         // Create a Firebase credential with the AccessToken
+    //         const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+
+    //         // Sign-in the user with the credential
+    //         const userData = auth().signInWithCredential(facebookCredential);
+    //         console.log('userData', facebookCredential.token)
+    //     } catch (error) {
+    //         console.log('error', error)
+    //     }
+    // }
 
 
 
@@ -153,7 +183,7 @@ const Login = ({ navigation }) => {
                         </TouchableOpacity >
                     </View>
                     <View>
-                        <TouchableOpacity style={styles.socialLoginStyle} >
+                        <TouchableOpacity style={styles.socialLoginStyle} onPress={() => dispatch(onFbloginBtnPressed())}>
                             <FontAwesome5 name={'facebook'} size={50} solid={true} color={'#45aaf2'} />
                         </TouchableOpacity>
                     </View>
