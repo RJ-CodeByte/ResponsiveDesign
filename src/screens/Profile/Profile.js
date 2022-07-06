@@ -22,10 +22,10 @@ const Profile = ({ navigation, route, setParams }) => {
                 flex: 1, backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30,
                 paddingVertical: 50, paddingHorizontal: 20
             }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '90%', alignItems: 'center' }}>
-                    <Image source={{ uri: userInfo.picture.data.url }} style={{ width: 100, height: 100 }} />
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                    <Image source={{ uri: userInfo?.picture?.data?.url ?? userInfo.photoURL }} style={{ width: 100, height: 100 }} />
                     <View >
-                        <Text style={{ fontWeight: '700', color: colors.black, fontSize: scale(20) }}>{userInfo.first_name + ' ' + userInfo.last_name}</Text>
+                        <Text style={{ fontWeight: '700', color: colors.black, fontSize: scale(20) }}>{`${userInfo?.first_name ?? ''} ${userInfo?.last_name ?? ''}`}{userInfo.displayName}</Text>
                         <Text style={{ fontWeight: '400', color: colors.blackOpacity50, fontSize: scale(15) }}>{userInfo.email}</Text>
                     </View>
                 </View>

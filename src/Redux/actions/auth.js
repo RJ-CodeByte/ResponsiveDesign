@@ -3,9 +3,10 @@ import auth from '@react-native-firebase/auth';
 import { LOGIN, SIGNUP, UserList } from '../../config/urls'
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import types from '../types'
-import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk-next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { sha256 } from 'react-native-sha256';
+import { Platform } from 'react-native';
 
 export const userLogin = (email, password) => {
     try {
@@ -143,26 +144,31 @@ export const onFbloginBtnPressed = () => {
     try {
         return async dispatch => {
             try {
-
+                const nonce = '123456';
+                const nonceSha256 = await sha256(nonce);
                 const result = await LoginManager.logInWithPermissions(['public_profile', 'email',], 'limited',
-                    'my_nonce');
+                    nonceSha256);
 
                 console.log('result', result)
+
 
                 if (result.isCancelled) {
                     throw 'User cancelled the login process';
                 }
 
                 // Once signed in, get the users AccesToken
-                const data = await AccessToken.getCurrentAccessToken();
 
+                if (Platform.OS === 'ios') {
+                    const data = await AuthenticationToken.getAuthenticationTokenIOS();
+                }
+                const data = await AccessToken.getCurrentAccessToken();
                 if (!data) {
                     throw 'Something went wrong obtaining access token';
                 }
                 console.log('data', data)
 
                 // Create a Firebase credential with the AccessToken
-                const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+                const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken, nonce);
                 // Sign-in the user with the credential
                 const userData = auth().signInWithCredential(facebookCredential);
                 dispatch({
@@ -219,22 +225,61 @@ export const registeracess = () => {
 
 export const userLogout = () => {
     try {
-        return dispatch => {
+        return async dispatch => {
             // auth().signOut().then(() =>
             //     dispatch({
             //         type: types.LOGIN,
             //         payload: null
             //     })
-            // )          
-            GoogleSignin.signOut()
+            // )            
 
-            AsyncStorage.removeItem("myToken").then(() => {
-                auth().signOut().then(() =>
+            // if (pvid == 'google.com') {
+            //     GoogleSignin.signOut()
+            // }
+
+            const data = await AccessToken.getCurrentAccessToken();
+            if (!data) {
+                GoogleSignin.signOut().then(() =>
                     dispatch({
                         type: types.LOGIN,
                         payload: null
                     })
                 )
+            }
+            let logout = new GraphRequest(
+                "me/permissions",
+                {
+                    accessToken: data?.accessToken,
+                    httpMethod: 'DELETE'
+                },
+                (error, result) => {
+                    if (error) {
+                        console.log('Error fetching data: ' + error.toString());
+                    } else {
+                        LoginManager.logOut();
+                        dispatch({
+                            type: types.LOGIN,
+                            payload: null
+                        })
+                    }
+                });
+            new GraphRequestManager().addRequest(logout).start();
+
+            AsyncStorage.removeItem("myToken").then(() => {
+                auth().onAuthStateChanged(user => {
+                    console.log('user', user)
+                    dispatch({
+                        type: types.LOGIN,
+                        payload: null
+                    })
+                })
+                // GoogleSignin.signOut().then(() =>
+                //     dispatch({
+                //         type: types.LOGIN,
+                //         payload: null
+                //     })
+                // )
+
             })
 
         }
